@@ -1,0 +1,29 @@
+# compiled files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+
+# compiled tests
+*.test
+*.test.exe
+
+
+# temp files
+*.log
+*.tmp
+*.swp
+*~
+
+
+main
+vendor/
+.vscode/
+.idea
+
+.env
+
+go.work.sum
+go.work

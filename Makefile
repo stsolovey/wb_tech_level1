@@ -1,5 +1,20 @@
-task1:
+t1:
 	go run ./task1/main.go
+
+t2-1:
+	go run ./task2/solution1/main.go
+
+t2-2:
+	go run ./task2/solution2/main.go
+
+t2-3:
+	go run ./task2/solution3/main.go
+
+t2-4:
+	go run ./task2/solution4/main.go
+
+t2-5:
+	go run ./task2/solution4/main.go
 
 tidy:
 	gofumpt -w .
@@ -20,4 +35,9 @@ help:
 	@echo "  tidy                 - Format and tidy up the Go code"
 	@echo "  lint                 - Lint and format the project code"
 	@echo "  tools                - Install necessary tools"
-	@echo "  task1                - Execute task 1"
+	@echo "  t1                   - Execute task 1"
+	@echo "  t2-1                 - Execute task 2 solution 1"
+	@echo "  t2-2                 - Execute task 2 solution 2"
+	@echo "  t2-3                 - Execute task 2 solution 3"
+	@echo "  t2-4                 - Execute task 2 solution 4"
+	@echo "  t2-5                 - Execute task 2 solution 5"
