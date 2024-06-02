@@ -15,7 +15,6 @@ func calculateSquare(num int, wg *sync.WaitGroup, results chan<- int) {
 	time.Sleep(time.Second) // Имитация задержки для проверки конкурентности
 
 	square := num * num
-
 	results <- square
 }
 
