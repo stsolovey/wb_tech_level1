@@ -33,6 +33,26 @@ t2-8:
 	@echo "Использование атомарных операций"
 	go run ./task2/solution4/main.go
 
+t3-1:
+	@echo ""
+	go run ./task3/solution1/main.go
+
+t3-2:
+	@echo ""
+	go run ./task3/solution2/main.go
+
+t4-1:
+	@echo ""
+	go run ./task4/solution1/main.go 3
+
+t4-2:
+	@echo ""
+	go run ./task4/solution2/main.go 3
+
+t4-3:
+	@echo ""
+	go run ./task4/solution3/main.go 3
+
 tidy:
 	gofumpt -w .
 	gci write . --skip-generated -s standard -s default
