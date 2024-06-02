@@ -2,18 +2,35 @@ t1:
 	go run ./task1/main.go
 
 t2-1:
+	@echo "Конкурентное вычисление с использованием канала"
 	go run ./task2/solution1/main.go
 
 t2-2:
+	@echo "Конкурентное вычисление с сохранением результатов в срез"
 	go run ./task2/solution2/main.go
 
 t2-3:
+	@echo "Работа с каналами и структурами для заданий"
 	go run ./task2/solution3/main.go
 
 t2-4:
+	@echo "Использование 'sync.Map' для хранения результатов"
 	go run ./task2/solution4/main.go
 
 t2-5:
+	@echo "Паттерн Fan-In для сбора результатов в один канал"
+	go run ./task2/solution4/main.go
+
+t2-6:
+	@echo "Использование пула горутин с ограниченным размером"
+	go run ./task2/solution4/main.go
+
+t2-7:
+	@echo "Использование пакета 'reflect.Select'"
+	go run ./task2/solution4/main.go
+
+t2-8:
+	@echo "Использование атомарных операций"
 	go run ./task2/solution4/main.go
 
 tidy:
@@ -41,3 +58,6 @@ help:
 	@echo "  t2-3                 - Execute task 2 solution 3"
 	@echo "  t2-4                 - Execute task 2 solution 4"
 	@echo "  t2-5                 - Execute task 2 solution 5"
+	@echo "  t2-5                 - Execute task 2 solution 6"
+	@echo "  t2-5                 - Execute task 2 solution 7"
+	@echo "  t2-5                 - Execute task 2 solution 8"
