@@ -1,84 +1,58 @@
 package main
 
 import (
-	"context"
 	"os"
-	"strconv"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/sirupsen/logrus"
 )
 
 const (
-	numJobs             = 100 // Количество задач
-	delayJobsGen        = 500 * time.Millisecond
-	delayJobsProcessing = 5 * time.Second
+	numWorkers       = 5               // количество воркеров
+	dataSendInterval = 1 * time.Second // интервал отправки данных
 )
 
-func worker(ctx context.Context, log *logrus.Logger, id int, jobs <-chan int, wg *sync.WaitGroup) {
-	defer wg.Done()
+// worker функция горутины, которая обрабатывает входящие данные.
+func worker(log *logrus.Logger, wg *sync.WaitGroup, id int, data <-chan int) {
+	defer wg.Done() // Пометить завершение горутины в WaitGroup по завершению функции
 
-	for {
-		select {
-		case job, ok := <-jobs:
-			if !ok {
-				log.Infof("worker %d: channel closed\n", id)
-
-				return
-			}
-
-			log.Infof("worker %d processing job %d\n", id, job)
-			time.Sleep(time.Second) // Имитация работы
-
-		case <-ctx.Done():
-			log.Infof("worker %d: stopping as per context signal\n", id)
-
-			return
-		}
+	for val := range data { // Бесконечный цикл, читающий данные из канала
+		log.Infof("Worker %d received data: %d\n", id, val) // Логирование полученных данных
 	}
 }
 
 func main() {
 	log := logrus.New()
-	log.SetFormatter(&logrus.TextFormatter{})
+	log.SetFormatter(&logrus.TextFormatter{}) // Настройка форматирования логов
 
-	numWorkers, err := strconv.Atoi(os.Args[1])
-	if err != nil || numWorkers <= 0 {
-		log.Infoln("Please provide a valid number of workers.")
+	var wg sync.WaitGroup // Инициализация группы ожидания для синхронизации завершения горутин
 
-		return
+	data := make(chan int) // Создание канала для передачи данных воркерам
+
+	// Запуск воркеров
+	for i := 1; i <= numWorkers; i++ {
+		wg.Add(1) // Уведомление WaitGroup о новой задаче
+
+		go worker(log, &wg, i, data) // Запуск горутины воркера
 	}
 
-	jobs := make(chan int, numJobs) // Канал с буфером
-	ctx, cancel := context.WithCancel(context.Background())
-
-	var wg sync.WaitGroup
-
-	// Создание пула воркеров
-	for w := 1; w <= numWorkers; w++ {
-		wg.Add(1)
-
-		go worker(ctx, log, w, jobs, &wg)
-	}
-
-	// Постоянная отправка данных в канал
+	// Горутина для генерации данных
 	go func() {
-		for j := 1; j <= 100; j++ { // Ограничиваем количество задач для демонстрации
-			jobs <- j
+		for i := 0; ; i++ { // Бесконечный цикл для генерации данных
+			data <- i // Отправка данных в канал
 
-			time.Sleep(delayJobsGen) // Более быстрая генерация задач
+			time.Sleep(dataSendInterval) // Пауза перед следующей отправкой
 		}
-
-		close(jobs)
 	}()
 
-	// Даем время на обработку
-	time.Sleep(delayJobsProcessing)
+	// Настройка перехвата системных сигналов для корректного завершения программы
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM) // Перехват сигналов прерывания и завершения
+	<-c                                             // Ожидание поступления сигнала
 
-	cancel() // Отправляем сигнал остановки воркерам
-
-	// Ожидание завершения всех воркеров
-	wg.Wait()
-	log.Infoln("All workers stopped gracefully.")
+	close(data) // Закрытие канала, что приведет к завершению чтения воркерами
+	wg.Wait()   // Ожидание завершения всех воркеров
 }

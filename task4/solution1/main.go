@@ -1,36 +1,31 @@
 package main
 
 import (
+	"context"
 	"os"
-	"strconv"
-	"sync"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/sirupsen/logrus"
 )
 
 const (
-	minArgs = 2
+	numWorkers   = 5               // Количество воркеров
+	dataInterval = 1 * time.Second // Интервал отправки данных
 )
 
-func produce(data chan<- int) {
-	// Генерация данных в бесконечном цикле
-	count := 0
-
+// worker представляет собой функцию горутины, которая обрабатывает данные.
+func worker(ctx context.Context, log *logrus.Logger, id int, data <-chan int) {
 	for {
-		data <- count
+		select {
+		case <-ctx.Done(): // Проверка сигнала на завершение контекста
+			log.Infof("Worker %d is stopping\n", id)
 
-		count++
-
-		time.Sleep(1 * time.Second) // Имитация задержки для читабельности вывода
-	}
-}
-
-func consume(log *logrus.Logger, id int, data <-chan int, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	for num := range data {
-		log.Infof("Worker %d received data: %d\n", id, num)
+			return
+		case val := <-data: // Получение данных из канала
+			log.Infof("Worker %d received data: %d\n", id, val)
+		}
 	}
 }
 
@@ -38,33 +33,29 @@ func main() {
 	log := logrus.New()
 	log.SetFormatter(&logrus.TextFormatter{})
 
-	if len(os.Args) < minArgs {
-		log.Infoln("Usage: go run main.go <number of workers>")
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel() // Гарантия вызова cancel для очистки ресурсов контекста
 
-		return
-	}
-
-	numWorkers, err := strconv.Atoi(os.Args[1])
-	if err != nil {
-		log.Infof("Invalid number of workers: %s\n", err)
-
-		return
-	}
-
-	// Канал для передачи данных от продюсера к воркерам
-	data := make(chan int)
-
-	var wg sync.WaitGroup
+	data := make(chan int) // Канал для передачи данных воркерам
 
 	// Запуск воркеров
 	for i := 1; i <= numWorkers; i++ {
-		wg.Add(1)
-
-		go consume(log, i, data, &wg)
+		go worker(ctx, log, i, data)
 	}
 
-	// Запуск производителя данных
-	go produce(data)
+	// Горутина для генерации и отправки данных воркерам
+	go func() {
+		for i := 0; ; i++ {
+			data <- i
 
-	wg.Wait() // Ожидание завершения работы всех воркеров (теоретически не наступит)
+			time.Sleep(dataInterval) // Пауза перед следующей отправкой данных
+		}
+	}()
+
+	// Настройка перехвата сигналов OS для корректного завершения работы
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM) // Перехват сигналов SIGINT и SIGTERM
+	<-c                                             // Блокировка до получения сигнала
+	log.Info("Shutting down gracefully...")
+	cancel() // Отправка сигнала всем воркерам для остановки
 }

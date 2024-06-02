@@ -2,56 +2,62 @@ package main
 
 import (
 	"os"
-	"strconv"
-	"sync"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/sirupsen/logrus"
 )
 
 const (
-	jobQueueBuffer = 100
+	numWorkers       = 5               // Количество воркеров
+	dataSendInterval = 1 * time.Second // Интервал отправки данных
 )
 
-func worker(log *logrus.Logger, id int, jobs <-chan int, wg *sync.WaitGroup) {
-	for j := range jobs {
-		log.Infof("worker %d processing job %d\n", id, j)
-		time.Sleep(time.Second) // Имитация работы
-	}
+// worker - функция горутины, обрабатывающая входящие данные из канала.
+func worker(log *logrus.Logger, done <-chan bool, id int, data <-chan int) {
+	for {
+		select {
+		case <-done:
+			// Если получен сигнал завершения, выходим из горутины
+			log.Infof("Worker %d is stopping\n", id)
 
-	wg.Done()
+			return
+		case val := <-data:
+			// Обработка полученных данных
+			log.Infof("Worker %d received data: %d\n", id, val)
+		}
+	}
 }
 
 func main() {
 	log := logrus.New()
 	log.SetFormatter(&logrus.TextFormatter{})
 
-	numWorkers, err := strconv.Atoi(os.Args[1])
-	if err != nil || numWorkers <= 0 {
-		log.Infoln("Please provide a valid number of workers.")
+	// Канал done используется для сигнализации о необходимости завершения работы воркеров
+	done := make(chan bool)
+	// Канал data используется для передачи данных воркерам
+	data := make(chan int)
 
-		return
+	// Запуск заданного количества воркеров
+	for i := 1; i <= numWorkers; i++ {
+		go worker(log, done, i, data)
 	}
 
-	jobs := make(chan int, jobQueueBuffer) // Канал с буфером
-	var wg sync.WaitGroup
-
-	// Создание пула воркеров
-	for w := 1; w <= numWorkers; w++ {
-		wg.Add(1)
-
-		go worker(log, w, jobs, &wg)
-	}
-
-	// Постоянная отправка данных в канал
+	// Горутина для генерации данных
 	go func() {
-		for j := 1; ; j++ {
-			jobs <- j
-
-			time.Sleep(time.Second) // Имитация новых данных
+		for i := 0; ; i++ {
+			data <- i
+			// Пауза перед следующей отправкой данных
+			time.Sleep(dataSendInterval)
 		}
 	}()
 
-	// Ожидание завершения воркеров (теоретически не наступит)
-	wg.Wait()
+	// Настройка для перехвата сигналов прерывания (Ctrl+C) и завершения программы
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	<-c // Ожидание сигнала
+
+	// Закрытие канала done для уведомления всех воркеров о необходимости завершения работы
+	close(done)
 }
