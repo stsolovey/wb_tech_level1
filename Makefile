@@ -73,6 +73,22 @@ t6:
 	@echo "Различные способы остановки горутины"
 	go run ./task6/main.go
 
+t7-1:
+	@echo "Конкурентная запись данных в map. sync.Map"
+	go run ./task7/solution1/main.go
+
+t7-2:
+	@echo "Конкурентная запись данных в map. Каналы"
+	go run ./task7/solution2/main.go
+
+t7-3:
+	@echo "Конкурентная запись данных в map. sync.Mutex"
+	go run ./task7/solution3/main.go
+
+t7-4:
+	@echo "Конкурентная запись данных в map. sync.RWMutex"
+	go run ./task7/solution4/main.go
+
 t8:
 	@echo "Изменение i-го бита переменной"
 	go run ./task8/main.go
