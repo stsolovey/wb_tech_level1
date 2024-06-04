@@ -34,24 +34,45 @@ t2-8:
 	go run ./task2/solution4/main.go
 
 t3-1:
-	@echo ""
+	@echo "Использование каналов для вычисления и суммирования"
 	go run ./task3/solution1/main.go
 
 t3-2:
-	@echo ""
+	@echo "Использование атомарных операций для суммирования квадратов"
 	go run ./task3/solution2/main.go
 
 t4-1:
-	@echo ""
-	go run ./task4/solution1/main.go 3
+	@echo "Использование контекста"
+	go run ./task4/solution1/main.go
 
 t4-2:
-	@echo ""
-	go run ./task4/solution2/main.go 3
+	@echo "Использование канала 'done'"
+	go run ./task4/solution2/main.go
 
 t4-3:
-	@echo ""
-	go run ./task4/solution3/main.go 3
+	@echo "Использование sync.WaitGroup"
+	go run ./task4/solution3/main.go
+
+t5-1:
+	@echo "таймер time.After + select"
+	go run ./task5/solution1/main.go
+
+t5-2:
+	@echo "таймер time.NewTimer + select"
+	go run ./task5/solution2/main.go
+
+t5-3:
+	@echo "Использование контекста с таймаутом"
+	go run ./task5/solution3/main.go
+
+t5-4:
+	@echo "Использование системных сигналов с таймером"
+	go run ./task5/solution4/main.go
+
+t6:
+	@echo "Использование системных сигналов с таймером"
+	go run ./task6/main.go
+
 
 tidy:
 	gofumpt -w .
