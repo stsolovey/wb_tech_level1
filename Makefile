@@ -70,8 +70,12 @@ t5-4:
 	go run ./task5/solution4/main.go
 
 t6:
-	@echo "Использование системных сигналов с таймером"
+	@echo "Различные способы остановки горутины"
 	go run ./task6/main.go
+
+t8:
+	@echo "Изменение i-го бита переменной"
+	go run ./task8/main.go
 
 
 tidy:
