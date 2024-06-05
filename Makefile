@@ -97,6 +97,21 @@ t9:
 	@echo "Конвеер чисел"
 	go run ./task9/main.go
 
+t10:
+	@echo "Группировка температур"
+	go run ./task10/main.go
+
+t11:
+	@echo "11 задача"
+	go run ./task11/main.go
+
+t12:
+	@echo "12 задача"
+	go run ./task12/main.go
+
+t13:
+	@echo "13 задача"
+	go run ./task13/main.go
 
 tidy:
 	gofumpt -w .
