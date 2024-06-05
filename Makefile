@@ -102,7 +102,7 @@ t10:
 	go run ./task10/main.go
 
 t11:
-	@echo "11 задача"
+	@echo "Пересечение множеств"
 	go run ./task11/main.go
 
 t12:
