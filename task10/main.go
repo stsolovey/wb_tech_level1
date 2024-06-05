@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/sirupsen/logrus"
 	"sort"
+
+	"github.com/sirupsen/logrus"
 )
 
 // 10. Дана последовательность температурных колебаний:
