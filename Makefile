@@ -113,6 +113,18 @@ t13:
 	@echo "13 задача"
 	go run ./task13/main.go
 
+t14:
+	@echo "14 задача"
+	go run ./task14/main.go
+
+t15:
+	@echo "15 задача"
+	go run ./task15/main.go
+
+t16:
+	@echo "16 задача"
+	go run ./task16/main.go
+
 tidy:
 	gofumpt -w .
 	gci write . --skip-generated -s standard -s default
