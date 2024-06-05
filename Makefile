@@ -93,6 +93,10 @@ t8:
 	@echo "Изменение i-го бита переменной"
 	go run ./task8/main.go
 
+t9:
+	@echo "Конвеер чисел"
+	go run ./task9/main.go
+
 
 tidy:
 	gofumpt -w .
