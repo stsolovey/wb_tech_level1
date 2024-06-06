@@ -15,7 +15,7 @@ const (
 
 var errStringTooSmall = errors.New("string is too small")
 
-// Создание и возврат строки заданной длины
+// Создание и возврат строки заданной длины.
 func createHugeString(size int) string {
 	var builder strings.Builder
 
