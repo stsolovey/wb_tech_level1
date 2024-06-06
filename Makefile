@@ -125,6 +125,50 @@ t16:
 	@echo "16 задача"
 	go run ./task16/main.go
 
+t17:
+	@echo "17 задача"
+	go run ./task17/main.go
+
+t18-1:
+	@echo "18 Счётчик sync/atomic"
+	go run ./task18/solution1/main.go
+
+t18-2:
+	@echo "18 Счётчик sync мьютексы"
+	go run ./task18/solution2/main.go
+
+t18-3:
+	@echo "18 Счётчик с каналами"
+	go run ./task18/solution3/main.go
+
+t19:
+	@echo "19 задача"
+	go run ./task19/main.go
+
+t20:
+	@echo "20 задача"
+	go run ./task20/main.go
+
+t21:
+	@echo "21 задача"
+	go run ./task21/main.go
+
+t22:
+	@echo "22 задача"
+	go run ./task22/main.go
+
+t23:
+	@echo "23 задача"
+	go run ./task23/main.go
+
+t24:
+	@echo "24 задача"
+	go run ./task24/main.go
+
+t25:
+	@echo "25 задача"
+	go run ./task25/main.go
+
 tidy:
 	gofumpt -w .
 	gci write . --skip-generated -s standard -s default
