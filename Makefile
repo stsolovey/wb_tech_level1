@@ -174,8 +174,12 @@ t24:
 	go run ./task24/main.go
 
 t25:
-	@echo "25 sleep"
+	@echo "25 custom sleep"
 	go run ./task25/main.go
+
+t26:
+	@echo "26 check string uniqueness"
+	go run ./task26/main.go
 
 tidy:
 	gofumpt -w .
@@ -193,15 +197,33 @@ tools:
 
 help:
 	@echo "Available commands:"
-	@echo "  tidy                 - Format and tidy up the Go code"
-	@echo "  lint                 - Lint and format the project code"
-	@echo "  tools                - Install necessary tools"
-	@echo "  t1                   - Execute task 1"
-	@echo "  t2-1                 - Execute task 2 solution 1"
-	@echo "  t2-2                 - Execute task 2 solution 2"
-	@echo "  t2-3                 - Execute task 2 solution 3"
-	@echo "  t2-4                 - Execute task 2 solution 4"
-	@echo "  t2-5                 - Execute task 2 solution 5"
-	@echo "  t2-5                 - Execute task 2 solution 6"
-	@echo "  t2-5                 - Execute task 2 solution 7"
-	@echo "  t2-5                 - Execute task 2 solution 8"
+	@echo "  tidy                 - Format and tidy up the Go code using gofumpt and gci"
+	@echo "  lint                 - Lint the project code and ensure it adheres to best practices"
+	@echo "  tools                - Install or update necessary Go tools"
+	@echo "  t1                   - Run the task related to structure embedding and inheritance simulation"
+	@echo "  t2-1 to t2-8         - Run different solutions for concurrent calculation of squares from an array"
+	@echo "  t3-1, t3-2           - Run solutions for concurrent calculation of the sum of squares"
+	@echo "  t4-1 to t4-3         - Run different approaches for implementing concurrent workers reading from a channel"
+	@echo "  t5-1 to t5-4         - Run solutions to implement program termination after N seconds using various techniques"
+	@echo "  t6                   - Demonstrate different methods to stop a goroutine"
+	@echo "  t7-1 to t7-4         - Implement and compare methods for concurrent map writing"
+	@echo "  t8                   - Run the task to modify a specific bit in an int64 variable"
+	@echo "  t9                   - Execute the number conveyor task"
+	@echo "  t10                  - Group temperature fluctuations into buckets of 10 degrees"
+	@echo "  t11                  - Find the intersection of two sets"
+	@echo "  t12                  - Create a set from a sequence of strings"
+	@echo "  t13                  - Swap two numbers without using a temporary variable"
+	@echo "  t14                  - Determine the type of a variable at runtime from an interface{}"
+	@echo "  t15                  - Discuss the drawbacks of slicing in Go and provide a safe alternative"
+	@echo "  t16                  - Implement quicksort"
+	@echo "  t17                  - Implement binary search"
+	@echo "  t18-1 to t18-3       - Implement and compare methods for a concurrent counter"
+	@echo "  t19                  - Reverse a unicode string"
+	@echo "  t20                  - Reverse the words in a sentence"
+	@echo "  t21                  - Implement the adapter pattern"
+	@echo "  t22                  - Perform arithmetic operations on large numbers"
+	@echo "  t23-1 to t23-3       - Implement different methods to remove an element from a slice"
+	@would_be "  t24                  - Calculate the distance between two points represented as structures"
+	@echo "  t25                  - Implement a custom sleep function"
+	@echo "  t26                  - Check if all characters in a string are unique and case-insensitive"
+
